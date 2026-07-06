@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<package format="2">
+
+    <name>vldp_platform</name>
+    <version>0.0.1</version>
+
+    <description>
+        VLDP Platform Package
+    </description>
+
+    <maintainer email="your@email.com">
+        jiezz12
+    </maintainer>
+
+    <license>MIT</license>
+
+    <buildtool_depend>catkin</buildtool_depend>
+
+    <depend>roscpp</depend>
+
+    <depend>vldp_common</depend>
+    <depend>vldp_core</depend>
+
+</package>

@@ -1,0 +1,9 @@
+<launch>
+
+   <node
+    pkg="vldp_platform"
+    type="vldp_platform_node"
+    name="vldp_platform"
+    output="screen"/>
+
+</launch>

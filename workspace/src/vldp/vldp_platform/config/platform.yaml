@@ -1,0 +1,5 @@
+camera_topic: "/camera/color/image_raw"
+
+imu_topic: "/mavros/imu/data"
+
+odom_topic: "/vins_fusion/odometry"
