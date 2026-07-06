@@ -9,6 +9,7 @@
 int main(int argc, char** argv)
 {
     ros::init(argc, argv, "test_common");
+    setlocale(LC_CTYPE,"zh_CN.utf8");
 
     vldp::Log::Initialize();
     
@@ -17,6 +18,8 @@ int main(int argc, char** argv)
     // Timer测试
     vldp::Timer timer;
     
+    ros::Time::init();
+
     ros::Duration(0.1).sleep();
     
     vldp::Log::Info(
