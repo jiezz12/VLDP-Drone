@@ -20,5 +20,10 @@
 
     <depend>vldp_common</depend>
     <depend>vldp_core</depend>
+    <depend>sensor_msgs</depend>
+
+<depend>cv_bridge</depend>
+
+<depend>image_transport</depend>
 
 </package>

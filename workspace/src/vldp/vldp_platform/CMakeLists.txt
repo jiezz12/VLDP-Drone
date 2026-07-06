@@ -15,7 +15,12 @@ find_package(catkin REQUIRED COMPONENTS
     roscpp
     vldp_common
     vldp_core
+    sensor_msgs
+    image_transport
+    cv_bridge
 )
+
+find_package(OpenCV REQUIRED)
 
 catkin_package(
     INCLUDE_DIRS include
@@ -28,6 +33,7 @@ catkin_package(
 include_directories(
     include
     ${catkin_INCLUDE_DIRS}
+    ${OpenCV_INCLUDE_DIRS}
 )
 
 add_library(vldp_platform
@@ -37,6 +43,8 @@ add_library(vldp_platform
 target_link_libraries(
     vldp_platform
     ${catkin_LIBRARIES}
+    ${OpenCV_LIBRARIES}
+
 )
 
 add_executable(vldp_platform_node
