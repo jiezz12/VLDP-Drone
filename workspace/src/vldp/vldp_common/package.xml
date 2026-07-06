@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>vldp_common</name>
+  <version>0.1.0</version>
+  <description>VLDP core common utilities (logger, config, timer, math)</description>
+
+  <maintainer email="you@todo.todo">VLDP</maintainer>
+  <license>MIT</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <depend>roscpp</depend>
+  <depend>std_msgs</depend>
+
+  <export>
+  </export>
+</package>
