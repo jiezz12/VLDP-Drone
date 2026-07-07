@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+
+<package format="2">
+
+  <name>vldp_px4_bridge</name>
+
+  <version>0.1.0</version>
+
+  <description>
+    VLDP-Drone PX4桥接功能包
+  </description>
+
+
+  <maintainer email="jiezz12@example.com">
+    jiezz12
+  </maintainer>
+
+
+  <license>
+    MIT
+  </license>
+
+
+  <buildtool_depend>
+    catkin
+  </buildtool_depend>
+
+
+  <!-- ROS基础 -->
+
+  <build_depend>
+    roscpp
+  </build_depend>
+
+
+  <build_depend>
+    geometry_msgs
+  </build_depend>
+
+
+  <build_depend>
+    mavros_msgs
+  </build_depend>
+
+
+  <build_depend>
+    vldp_msgs
+  </build_depend>
+
+  <build_depend>
+    vldp_core
+  </build_depend>
+
+  <exec_depend>
+    roscpp
+  </exec_depend>
+
+
+  <exec_depend>
+    geometry_msgs
+  </exec_depend>
+
+
+  <exec_depend>
+    mavros_msgs
+  </exec_depend>
+
+
+  <exec_depend>
+    vldp_msgs
+  </exec_depend>
+
+  <exec_depend>
+    vldp_core
+  </exec_depend>
+</package>
