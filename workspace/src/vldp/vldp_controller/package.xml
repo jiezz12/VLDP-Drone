@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<package format="2">
+
+    <name>vldp_controller</name>
+    <version>0.0.1</version>
+
+    <description>
+        VLDP Controller Package
+    </description>
+
+    <maintainer email="your@email.com">
+        jiezz12
+    </maintainer>
+
+    <license>MIT</license>
+
+    <buildtool_depend>catkin</buildtool_depend>
+
+    <depend>roscpp</depend>
+
+    <depend>vldp_common</depend>
+
+    <depend>std_msgs</depend>
+
+
+</package>
