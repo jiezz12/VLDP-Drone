@@ -1,27 +1,26 @@
-#pragma once
-
-/**
+/******************************************************************************
  * @file velocity.h
- * @brief 速度数据结构
- */
+ * @brief 无人机速度数据结构
+ *
+ * 定义无人机线速度和角速度。
+ *
+ * Project : VLDP-Drone
+ ******************************************************************************/
+
+#pragma once
 
 namespace vldp
 {
 
-/**
- * @brief 三维速度
- */
 struct Velocity
 {
     /// 线速度（m/s）
-    double vx{0.0};
-    double vy{0.0};
-    double vz{0.0};
+    double x{0.0};
+    double y{0.0};
+    double z{0.0};
 
-    /// 角速度（rad/s）
-    double wx{0.0};
-    double wy{0.0};
-    double wz{0.0};
+    /// 偏航角速度（rad/s）
+    double yaw_rate{0.0};
 };
 
-}
+} // namespace vldp

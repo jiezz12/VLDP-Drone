@@ -19,7 +19,7 @@ namespace vldp
  */
 struct Pose
 {
-    /// 时间戳（秒）
+   /// 时间戳（ROS Time，单位：秒）
     double timestamp{0.0};
 
     /// 位置（米）
