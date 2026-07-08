@@ -20,6 +20,8 @@
 
     <depend>vldp_common</depend>
 
+    <depend>vldp_core</depend>
+
     <depend>std_msgs</depend>
 
 

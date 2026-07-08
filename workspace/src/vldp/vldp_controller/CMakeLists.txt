@@ -9,6 +9,8 @@ find_package(catkin REQUIRED COMPONENTS
     roscpp
     std_msgs
     vldp_common
+    vldp_core
+    vldp_msgs
 )
 
 catkin_package(

@@ -7,34 +7,58 @@
 
 #include "vldp_controller/controller.h"
 
-#include "vldp_common/logger.h"
 
 namespace vldp
 {
+
 
 Controller::Controller()
     : control_count_(0)
 {
 }
 
+
 bool Controller::Initialize()
 {
-    Log::Info("Controller 初始化成功。");
+    control_count_ = 0;
+
+    command_.vx = 0.0;
+    command_.vy = 0.0;
+    command_.vz = 0.0;
+    command_.yaw_rate = 0.0;
+    command_.valid = false;
+
 
     return true;
 }
 
-void Controller::Update()
-{
-    ++control_count_;
 
-    // 每100次输出一次运行状态
-    if (control_count_ % 100 == 0)
-    {
-        Log::Info(
-            "Controller 正在运行，控制循环计数："
-            + std::to_string(control_count_));
-    }
+ControlCommand Controller::Update()
+{
+    control_count_++;
+
+
+    /*
+     * Sprint2测试阶段：
+     *
+     * 固定输出前进速度。
+     *
+     * 后续替换为：
+     * 视觉算法
+     * VLM决策
+     * 轨迹规划
+     */
+
+    command_.vx = 0.3;
+    command_.vy = 0.0;
+    command_.vz = 0.0;
+    command_.yaw_rate = 0.0;
+
+    command_.valid = true;
+
+
+    return command_;
 }
+
 
 } // namespace vldp

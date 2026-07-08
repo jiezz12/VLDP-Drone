@@ -86,6 +86,78 @@ docs/architecture.md
 
 ---
 
+Sprint1  ✓
+────────────────────────────────────
+Framework
+
+Platform
+Controller
+Core
+Msgs
+Documentation
+
+↓
+Sprint2  ✓
+────────────────────────────────────
+PX4 Control
+Controller
+↓
+ControlCommand
+↓
+PX4Bridge
+↓
+PX4
+↓
+Gazebo Verification
+↓
+Sprint3（现在）
+────────────────────────────────────
+Unified State Estimation
+
+Localization
+↓
+Observation
+↓
+PX4 EKF2
+↓
+Controller
+↓
+Sprint4
+────────────────────────────────────
+Perception
+
+YOLO
+Depth
+Segmentation
+Tracking
+↓
+Sprint5
+────────────────────────────────────
+Vision-Language
+Qwen2.5-VL
+InternVL
+VLM Interface
+↓
+Sprint6
+────────────────────────────────────
+VLN Planner
+Language Goal
+↓
+Waypoint
+↓
+Controller
+↓
+Sprint7
+────────────────────────────────────
+Differentiable Physics
+Physics Prior
+Simulation
+Learning
+↓
+v1.0
+────────────────────────────────────
+Real UAV
+
 ## 开发环境
 
 Ubuntu 20.04

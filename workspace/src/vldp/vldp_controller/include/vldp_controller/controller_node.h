@@ -2,13 +2,6 @@
  * @file controller_node.h
  * @brief 控制器 ROS 节点
  *
- * ControllerNode 负责 ROS 相关功能，包括：
- * 1. 参数加载
- * 2. 创建控制循环定时器
- * 3. 调用 Controller 更新
- *
- * 所有控制逻辑均由 Controller 类完成。
- *
  * Project : VLDP-Drone
  ******************************************************************************/
 
@@ -16,74 +9,68 @@
 
 #include <ros/ros.h>
 
+#include <vldp_msgs/ControlCommand.h>
+
 #include "vldp_controller/controller.h"
+
+#include "vldp_core/control_command.h"
 
 namespace vldp
 {
 
-/**
- * @brief 控制器 ROS 节点
- */
 class ControllerNode
 {
 public:
 
-    /**
-     * @brief 构造函数
-     * @param nh ROS节点句柄
-     */
     explicit ControllerNode(ros::NodeHandle& nh);
 
-    /**
-     * @brief 析构函数
-     */
     ~ControllerNode() = default;
 
-    /**
-     * @brief 初始化节点
-     * @return 初始化成功返回 true
-     */
     bool Initialize();
 
 private:
 
     /**
      * @brief 加载参数
-     * @return 成功返回 true
      */
     bool LoadParameters();
 
     /**
-     * @brief 创建控制循环定时器
-     * @return 成功返回 true
+     * @brief 创建 ROS 通信
      */
-    bool CreateTimer();
+    bool CreateROSInterfaces();
+
+
+	    bool CreateTimer();
+    /**
+     * @brief 控制定时器回调
+     */
+    void ControlTimerCallback(
+        const ros::TimerEvent& event
+    );
 
     /**
-     * @brief 控制循环回调函数
+     * @brief 发布控制命令
      */
-    void ControlTimerCallback(const ros::TimerEvent& event);
+    void PublishCommand(
+        const ControlCommand& command
+    );
 
 private:
 
-    /**
-     * @brief ROS节点句柄
-     */
+    /// ROS节点句柄
     ros::NodeHandle nh_;
 
-    /**
-     * @brief 控制器对象
-     */
+    /// 控制器核心
     Controller controller_;
 
-    /**
-     * @brief 控制循环定时器
-     */
+    /// 控制定时器
     ros::Timer control_timer_;
 
-    /**
-     * @brief 控制频率（Hz）
-     */
+    /// 控制命令发布器
+    ros::Publisher command_pub_;
+
+    /// 控制频率
     double control_frequency_;
 };
 
