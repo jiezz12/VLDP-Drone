@@ -1,4 +1,3 @@
-```xml
 <?xml version="1.0"?>
 <package format="2">
   <name>vldp_localization</name>
@@ -8,9 +7,7 @@
     Unified localization module for Vision-Language Differentiable Physics Drone (VLDP).
   </description>
 
-  <maintainer email="your_email@example.com">
-jiezz12
-  </maintainer>
+  <maintainer email="your_email@example.com">jiezz12</maintainer>
 
   <license>MIT</license>
 
@@ -32,9 +29,9 @@ jiezz12
   <!-- VLDP -->
   <depend>vldp_core</depend>
 
+  <depend>gazebo_msgs</depend>
   <export>
   </export>
 
 </package>
-```
 

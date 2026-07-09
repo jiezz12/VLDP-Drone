@@ -53,45 +53,32 @@ public:
 
     ~Localization() = default;
 
-    /**
-     * @brief 初始化定位模块
-     * @return 是否初始化成功
-     */
     bool Initialize();
 
     /**
-     * @brief 更新位姿
-     * @param pose 最新位姿
+     * @brief 更新定位状态
+     *
+     * @param pose      当前位姿
+     * @param velocity  当前速度
+     * @param source    定位来源
+     * @param valid     定位是否有效
      */
-    void UpdatePose(const vldp_core::Pose& pose);
-
-    /**
-     * @brief 更新速度
-     * @param velocity 最新速度
-     */
-    void UpdateVelocity(const vldp_core::Velocity& velocity);
-
-    /**
-     * @brief 设置定位来源
-     * @param source 定位来源
-     */
-    void SetLocalizationSource(LocalizationSource source);
-
-    /**
-     * @brief 设置定位有效性
-     * @param valid 是否有效
-     */
-    void SetLocalizationValid(bool valid);
-
+	void Update(
+	    const vldp::Pose& pose,
+	    const vldp::Velocity& velocity,
+	    LocalizationSource source
+	    );
+	    
+	    void Localization::Reset()；
     /**
      * @brief 获取当前位姿
      */
-    vldp_core::Pose GetPose() const;
+    vldp::Pose GetPose() const;
 
     /**
      * @brief 获取当前速度
      */
-    vldp_core::Velocity GetVelocity() const;
+    vldp::Velocity GetVelocity() const;
 
     /**
      * @brief 获取定位来源
@@ -106,10 +93,10 @@ public:
 private:
 
     /// 当前位姿
-    vldp_core::Pose pose_;
+    vldp::Pose pose_;
 
     /// 当前速度
-    vldp_core::Velocity velocity_;
+    vldp::Velocity velocity_;
 
     /// 定位来源
     LocalizationSource source_;

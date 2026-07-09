@@ -1,0 +1,14 @@
+# Localization 数据源
+localization_source: gazebo
+
+# Gazebo Ground Truth
+gazebo_model_states_topic: /gazebo/model_states
+
+# VINS Fusion
+vins_topic: /vins_fusion/imu_propagate
+
+# PX4 Vision Pose（Sprint3 后续启用）
+vision_pose_topic: /mavros/vision_pose/pose
+
+# 节点运行频率
+update_rate: 30.0
