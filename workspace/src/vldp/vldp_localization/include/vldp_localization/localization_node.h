@@ -1,16 +1,35 @@
+#pragma once
+
 #include <gazebo_msgs/ModelStates.h>
 #include <nav_msgs/Odometry.h>
+#include <ros/ros.h>
 
 #include "vldp_core/pose.h"
 #include "vldp_core/velocity.h"
+#include "vldp_localization/localization.h"
 
+namespace vldp
+{
+
+class LocalizationNode
+{
+
+public:
+
+    LocalizationNode();
+
+    ~LocalizationNode() = default;
+
+    bool Initialize();
+    
 private:
+	
 
     bool LoadParameters();
 
     bool CreateROSInterfaces();
 
-    bool CreateTimer();
+
 
     /**
      * @brief Gazebo Ground Truth回调
@@ -27,11 +46,12 @@ private:
     /**
      * @brief 更新Localization状态
      */
+    /*
     void UpdateLocalization(
         const vldp::Pose& pose,
         const vldp::Velocity& velocity,
-        LocalizationSource source);
-
+        vldp_localization::LocalizationSource source);
+*/
 private:
 
     ros::NodeHandle nh_;
@@ -55,3 +75,7 @@ private:
     double update_rate_;
     
     int vehicle_index_;
+      
+    };
+    
+}

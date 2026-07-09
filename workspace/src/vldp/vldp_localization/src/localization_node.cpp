@@ -7,7 +7,11 @@
 
 #include "vldp_localization/localization_node.h"
 
-namespace vldp_localization
+#include "vldp_common/logger.h"
+
+#include <gazebo_msgs/ModelStates.h>
+
+namespace vldp
 {
 
 LocalizationNode::LocalizationNode()
@@ -18,13 +22,17 @@ LocalizationNode::LocalizationNode()
 
 bool LocalizationNode::Initialize()
 {
-    vldp::Log::Info("Initializing localization node...");
+    vldp::Log::Info(
+        "Initializing localization node.");
 
-    localization_ = std::make_unique<Localization>();
+    localization_ =
+        std::make_unique<Localization>();
 
     if (!localization_->Initialize())
     {
-        vldp::Log::Error("Failed to initialize localization.");
+        vldp::Log::Error(
+            "Failed to initialize localization.");
+
         return false;
     }
 
@@ -38,12 +46,8 @@ bool LocalizationNode::Initialize()
         return false;
     }
 
-    if (!CreateTimer())
-    {
-        return false;
-    }
-
-    vldp::Log::Info("Localization node initialized.");
+    vldp::Log::Info(
+        "Localization node initialized.");
 
     return true;
 }
@@ -55,45 +59,19 @@ bool LocalizationNode::LoadParameters()
         gazebo_topic_,
         std::string("/gazebo/model_states"));
 
-    private_nh_.param(
-        "update_rate",
-        update_rate_,
-        30.0);
-
     return true;
 }
 
 bool LocalizationNode::CreateROSInterfaces()
 {
-    gazebo_sub_ = nh_.subscribe(
-        gazebo_topic_,
-        10,
-        &LocalizationNode::ModelStatesCallback,
-        this);
+    gazebo_sub_ =
+        nh_.subscribe(
+            gazebo_topic_,
+            10,
+            &LocalizationNode::ModelStatesCallback,
+            this);
 
     return true;
-}
-
-bool LocalizationNode::CreateTimer()
-{
-    // Sprint3 Phase1 暂时无需定时器
-
-    return true;
-}
-
-void LocalizationNode::OdometryCallback(
-    const nav_msgs::OdometryConstPtr& msg)
-{
-    (void)msg;
-
-    // 下一阶段：
-    //
-    // nav_msgs::Odometry
-    //       ↓
-    // Pose
-    // Velocity
-    //       ↓
-    // Localization
 }
 
 void LocalizationNode::ModelStatesCallback(
@@ -101,13 +79,17 @@ void LocalizationNode::ModelStatesCallback(
 {
     if (vehicle_index_ < 0)
     {
-        for (size_t i = 0; i < msg->name.size(); ++i)
+        for (size_t i = 0;
+             i < msg->name.size();
+             ++i)
         {
             if (msg->name[i] == "iris")
             {
-                vehicle_index_ = static_cast<int>(i);
+                vehicle_index_ =
+                    static_cast<int>(i);
 
-                vldp::Log::Info("Found vehicle model: iris");
+                vldp::Log::Info(
+                    "Found vehicle model: iris");
 
                 break;
             }
@@ -119,31 +101,42 @@ void LocalizationNode::ModelStatesCallback(
         }
     }
 
+    const auto& gazebo_pose =
+        msg->pose[vehicle_index_];
+
+    const auto& gazebo_twist =
+        msg->twist[vehicle_index_];
+
     vldp::Pose pose;
 
-    pose.position.x = msg->pose[vehicle_index_].position.x;
-    pose.position.y = msg->pose[vehicle_index_].position.y;
-    pose.position.z = msg->pose[vehicle_index_].position.z;
-
-    pose.orientation.w = msg->pose[vehicle_index_].orientation.w;
-    pose.orientation.x = msg->pose[vehicle_index_].orientation.x;
-    pose.orientation.y = msg->pose[vehicle_index_].orientation.y;
-    pose.orientation.z = msg->pose[vehicle_index_].orientation.z;
+   // 从 gazebo_pose 到 vldp::Pose
+	pose.x = gazebo_pose.position.x;
+	pose.y = gazebo_pose.position.y;
+	pose.z = gazebo_pose.position.z;
+	pose.qw = gazebo_pose.orientation.w;
+	pose.qx = gazebo_pose.orientation.x;
+	pose.qy = gazebo_pose.orientation.y;
+	pose.qz = gazebo_pose.orientation.z;
 
     vldp::Velocity velocity;
 
-    velocity.linear.x = msg->twist[vehicle_index_].linear.x;
-    velocity.linear.y = msg->twist[vehicle_index_].linear.y;
-    velocity.linear.z = msg->twist[vehicle_index_].linear.z;
+    velocity.x = gazebo_twist.linear.x;
+	velocity.y = gazebo_twist.linear.y;
+	velocity.z = gazebo_twist.linear.z;
 
-    velocity.angular.x = msg->twist[vehicle_index_].angular.x;
-    velocity.angular.y = msg->twist[vehicle_index_].angular.y;
-    velocity.angular.z = msg->twist[vehicle_index_].angular.z;
+    velocity.x_rate =
+        gazebo_twist.angular.x;
+
+    velocity.y_rate =
+        gazebo_twist.angular.y;
+
+    velocity.yaw_rate =
+        gazebo_twist.angular.z;
 
     localization_->Update(
         pose,
         velocity,
-        LocalizationSource::GAZEBO);
+        vldp::LocalizationSource::GAZEBO);
 }
 
-} // namespace vldp_localization
+} // namespace vldp

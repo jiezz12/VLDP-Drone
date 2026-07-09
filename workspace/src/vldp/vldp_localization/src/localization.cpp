@@ -7,7 +7,7 @@
 
 #include "vldp_localization/localization.h"
 
-namespace vldp_localization
+namespace vldp
 {
 
 Localization::Localization()

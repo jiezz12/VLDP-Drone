@@ -6,7 +6,7 @@
 #include "vldp_core/pose.h"
 #include "vldp_core/velocity.h"
 
-namespace vldp_localization
+namespace vldp
 {
 
 /**
@@ -69,7 +69,8 @@ public:
 	    LocalizationSource source
 	    );
 	    
-	    void Localization::Reset()；
+    void Reset();
+
     /**
      * @brief 获取当前位姿
      */
