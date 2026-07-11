@@ -20,6 +20,8 @@ struct Velocity
     double z{0.0};
 
     /// 偏航角速度（rad/s）
+    double x_rate{0.0};
+    double y_rate{0.0};
     double yaw_rate{0.0};
 };
 

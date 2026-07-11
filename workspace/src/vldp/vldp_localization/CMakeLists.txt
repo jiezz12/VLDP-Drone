@@ -15,6 +15,7 @@ find_package(catkin REQUIRED COMPONENTS
     tf2_geometry_msgs
     vldp_core
     gazebo_msgs
+    geometry_msgs
 )
 
 catkin_package(
@@ -29,6 +30,7 @@ catkin_package(
         tf2_geometry_msgs
         vldp_core
         gazebo_msgs
+        geometry_msgs
 )
 
 include_directories(
@@ -38,6 +40,8 @@ include_directories(
 
 add_library(${PROJECT_NAME}
     src/localization.cpp
+    src/localization_converter.cpp
+
 )
 
 target_link_libraries(${PROJECT_NAME}

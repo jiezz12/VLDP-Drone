@@ -36,10 +36,52 @@ void Localization::Update(
 {
     std::lock_guard<std::mutex> lock(mutex_);
 
+   if (static_cast<int>(source) >=
+    static_cast<int>(source_))
+{
     pose_ = pose;
+
     velocity_ = velocity;
+
     source_ = source;
+
     localization_valid_ = true;
+
+    last_update_time_ = ros::Time::now();
+}
+
+}
+
+ros::Time Localization::GetLastUpdateTime() const
+{
+    std::lock_guard<std::mutex> lock(mutex_);
+
+    return last_update_time_;
+}
+
+std::string LocalizationSourceToString(
+    LocalizationSource source)
+{
+    switch (source)
+    {
+    case LocalizationSource::NONE:
+        return "NONE";
+
+    case LocalizationSource::GAZEBO:
+        return "GAZEBO";
+
+    case LocalizationSource::VINS:
+        return "VINS";
+
+    case LocalizationSource::GPS:
+        return "GPS";
+
+    case LocalizationSource::RTK:
+        return "RTK";
+
+    default:
+        return "UNKNOWN";
+    }
 }
 
 void Localization::Reset()

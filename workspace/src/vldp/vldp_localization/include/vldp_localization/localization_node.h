@@ -3,10 +3,12 @@
 #include <gazebo_msgs/ModelStates.h>
 #include <nav_msgs/Odometry.h>
 #include <ros/ros.h>
+#include <geometry_msgs/PoseStamped.h>
 
 #include "vldp_core/pose.h"
 #include "vldp_core/velocity.h"
 #include "vldp_localization/localization.h"
+#include "vldp_localization/localization_converter.h"
 
 namespace vldp
 {
@@ -42,16 +44,13 @@ private:
      */
     void VinsCallback(
         const nav_msgs::OdometryConstPtr& msg);
+	
+	 bool CreateTimer();
 
-    /**
-     * @brief 更新Localization状态
-     */
-    /*
-    void UpdateLocalization(
-        const vldp::Pose& pose,
-        const vldp::Velocity& velocity,
-        vldp_localization::LocalizationSource source);
-*/
+	void PublishTimerCallback(
+	    const ros::TimerEvent&);
+	    
+ 
 private:
 
     ros::NodeHandle nh_;
@@ -63,6 +62,8 @@ private:
     ros::Subscriber vins_sub_;
 
     ros::Publisher vision_pose_pub_;
+    
+    ros::Timer publish_timer_;
 
     std::unique_ptr<Localization> localization_;
 
@@ -75,6 +76,10 @@ private:
     double update_rate_;
     
     int vehicle_index_;
+    
+    LocalizationSource last_source_;
+    
+    std::string localization_frame_;
       
     };
     

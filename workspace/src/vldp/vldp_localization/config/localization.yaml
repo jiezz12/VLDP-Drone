@@ -1,5 +1,5 @@
 # Localization 数据源
-localization_source: gazebo
+localization_source: vins
 
 # Gazebo Ground Truth
 gazebo_model_states_topic: /gazebo/model_states
@@ -12,3 +12,5 @@ vision_pose_topic: /mavros/vision_pose/pose
 
 # 节点运行频率
 update_rate: 30.0
+
+localization_frame: world

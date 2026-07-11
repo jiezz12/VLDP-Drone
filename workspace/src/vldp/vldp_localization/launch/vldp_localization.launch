@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<launch>
+  <node pkg="vldp_localization" name="vldp_localization" type="localization_node" output="screen"/>
+  		　<rosparam file="$(find vldp_localization)/config/localization.yaml" command="load"/>
+</launch>

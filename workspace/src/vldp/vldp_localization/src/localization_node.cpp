@@ -41,6 +41,11 @@ bool LocalizationNode::Initialize()
         return false;
     }
 
+if (!CreateTimer())
+{
+    return false;
+}
+
     if (!CreateROSInterfaces())
     {
         return false;
@@ -52,6 +57,61 @@ bool LocalizationNode::Initialize()
     return true;
 }
 
+bool LocalizationNode::CreateTimer()
+{
+    publish_timer_ =
+        nh_.createTimer(
+            ros::Duration(1.0 / update_rate_),
+            &LocalizationNode::PublishTimerCallback,
+            this);
+
+    return true;
+}
+
+void LocalizationNode::PublishTimerCallback(
+    const ros::TimerEvent&)
+{
+	constexpr double kLocalizationTimeout = 1.0;
+	
+	if ((ros::Time::now() -
+     localization_->GetLastUpdateTime()).toSec() >
+	    kLocalizationTimeout)
+	{
+	    localization_->Reset();
+
+	    return;
+	}
+
+    LocalizationSource current_source =
+    localization_->GetLocalizationSource();
+
+	if (current_source != last_source_)
+	{
+	    std::stringstream ss;
+
+	    ss << "Localization source switched to "
+	       << LocalizationSourceToString(current_source);
+
+	    vldp::Log::Info(ss.str());
+
+	    last_source_ = current_source;
+	}
+
+    if (!localization_->IsLocalizationValid())
+    {
+        return;
+    }
+
+    geometry_msgs::PoseStamped msg;
+
+    vldp::LocalizationConverter::PoseToVisionPose(
+        localization_->GetPose(),
+        localization_frame_,
+        &msg);
+
+    vision_pose_pub_.publish(msg);
+}
+
 bool LocalizationNode::LoadParameters()
 {
     private_nh_.param(
@@ -59,6 +119,26 @@ bool LocalizationNode::LoadParameters()
         gazebo_topic_,
         std::string("/gazebo/model_states"));
 
+    private_nh_.param(
+    "vision_pose_topic",
+    vision_pose_topic_,
+    std::string("/mavros/vision_pose/pose"));
+    
+    private_nh_.param(
+    "update_rate",
+    update_rate_,
+    30.0);
+    
+    private_nh_.param(
+    "vins_topic",
+    vins_topic_,
+    std::string("/vins_fusion/imu_propagate"));
+    
+    private_nh_.param(
+    "localization_frame",
+    localization_frame_,
+    std::string("world"));
+    
     return true;
 }
 
@@ -70,7 +150,19 @@ bool LocalizationNode::CreateROSInterfaces()
             10,
             &LocalizationNode::ModelStatesCallback,
             this);
-
+            
+    vision_pose_pub_ =
+    nh_.advertise<geometry_msgs::PoseStamped>(
+        vision_pose_topic_,
+        10);
+        
+    vins_sub_ =
+    nh_.subscribe(
+        vins_topic_,
+        10,
+        &LocalizationNode::VinsCallback,
+        this);
+        
     return true;
 }
 
@@ -108,35 +200,43 @@ void LocalizationNode::ModelStatesCallback(
         msg->twist[vehicle_index_];
 
     vldp::Pose pose;
-
-   // 从 gazebo_pose 到 vldp::Pose
-	pose.x = gazebo_pose.position.x;
-	pose.y = gazebo_pose.position.y;
-	pose.z = gazebo_pose.position.z;
-	pose.qw = gazebo_pose.orientation.w;
-	pose.qx = gazebo_pose.orientation.x;
-	pose.qy = gazebo_pose.orientation.y;
-	pose.qz = gazebo_pose.orientation.z;
-
     vldp::Velocity velocity;
 
-    velocity.x = gazebo_twist.linear.x;
-	velocity.y = gazebo_twist.linear.y;
-	velocity.z = gazebo_twist.linear.z;
+ vldp::LocalizationConverter::GazeboPoseToPose(
+    msg->pose[vehicle_index_],
+    &pose);
 
-    velocity.x_rate =
-        gazebo_twist.angular.x;
+	vldp::LocalizationConverter::GazeboTwistToVelocity(
+	    gazebo_twist,
+	    &velocity);
 
-    velocity.y_rate =
-        gazebo_twist.angular.y;
-
-    velocity.yaw_rate =
-        gazebo_twist.angular.z;
+pose.timestamp = ros::Time::now().toSec();
 
     localization_->Update(
         pose,
         velocity,
         vldp::LocalizationSource::GAZEBO);
+}
+
+void LocalizationNode::VinsCallback(
+    const nav_msgs::OdometryConstPtr& msg)
+{
+	vldp::Pose pose;
+
+	vldp::Velocity velocity;
+
+	LocalizationConverter::VinsOdometryToPose(
+	    *msg,
+	    &pose);
+
+	LocalizationConverter::VinsOdometryToVelocity(
+	    *msg,
+	    &velocity);
+
+	localization_->Update(
+	    pose,
+	    velocity,
+	    LocalizationSource::VINS);
 }
 
 } // namespace vldp

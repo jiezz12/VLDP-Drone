@@ -3,6 +3,8 @@
 
 #include <mutex>
 
+#include "ros/ros.h"
+
 #include "vldp_core/pose.h"
 #include "vldp_core/velocity.h"
 
@@ -18,20 +20,17 @@ enum class LocalizationSource
 {
     NONE = 0,
 
-    GAZEBO,
+    GAZEBO = 10,
 
-    VINS_FUSION,
+    GPS = 20,
 
-    OPEN_VINS,
+    VINS = 30,
 
-    ORB_SLAM3,
-
-    GPS,
-
-    RTK,
-
-    MOCAP
+    RTK = 40
 };
+
+ std::string LocalizationSourceToString(
+    LocalizationSource source);
 
 /**
  * @brief 统一定位状态管理类
@@ -61,7 +60,6 @@ public:
      * @param pose      当前位姿
      * @param velocity  当前速度
      * @param source    定位来源
-     * @param valid     定位是否有效
      */
 	void Update(
 	    const vldp::Pose& pose,
@@ -90,7 +88,10 @@ public:
      * @brief 当前定位是否有效
      */
     bool IsLocalizationValid() const;
-
+   
+    ros::Time GetLastUpdateTime() const;
+    
+   
 private:
 
     /// 当前位姿
@@ -107,8 +108,12 @@ private:
 
     /// 数据互斥锁
     mutable std::mutex mutex_;
+    
+    ros::Time last_update_time_;
+    
+    
 };
 
-}   // namespace vldp_localization
+}   // namespace vldp
 
 #endif  // VLDP_LOCALIZATION_LOCALIZATION_H_
