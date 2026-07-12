@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>vldp_mission</name>
+  <version>0.0.1</version>
+  <description>Mission module for VLDP-Drone.</description>
+
+  <maintainer email="your_email@example.com">VLDP</maintainer>
+  <license>MIT</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <!-- ROS -->
+  <depend>roscpp</depend>
+  <depend>std_msgs</depend>
+  <depend>geometry_msgs</depend>
+
+<!-- VLDP -->
+<depend>vldp_common</depend>
+<depend>vldp_core</depend>
+<depend>vldp_localization</depend>
+
+  <export>
+  </export>
+
+</package>
